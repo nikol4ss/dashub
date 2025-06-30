@@ -15,11 +15,11 @@
 
 ## Technologies Used
 
-- **Backend:** Django + SQLAlchemy  
-- **Data Processing:** Pandas  
-- **Charts:** -  
-- **Frontend:** -  
-- **Internal Database:** SQLite  
+- **Backend:** Django + SQLAlchemy
+- **Data Processing:** Pandas
+- **Charts:** -
+- **Frontend:** -
+- **Internal Database:** SQLite
 
 ## License
 

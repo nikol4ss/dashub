@@ -1,0 +1,2 @@
+# Dashub — Customizable Dashboard with Django
+> Web platform that enables the creation of customizable dashboards by directly connecting to multiple heterogeneous databases. The backend is built with Django, managing the logic and user interface. For data connection and manipulation, we use SQLAlchemy and Pandas, which allow access to various sources and fast transformations. Dashboard visualization will be implemented with a real-time charting library, chosen to ensure interactivity and dynamic data updates.

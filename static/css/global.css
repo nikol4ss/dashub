@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* =========================
+  Palette
+========================= */
+:root {
+  --black: #000000;
+  --gray-900: #121212;
+  --gray-800: #1d1d1d;
+  --gray-700: #2e2e2e;
+  --gray-600: #404040;
+  --gray-500: #7a7a7a;
+  --gray-300: #d1d1d1;
+  --gray-100: #f5f5f5;
+  --white: #ffffff;
+  --green: #137f0b;
+}
+
+/* =========================
+  Base
+========================= */
+body {
+  background-color: var(--white);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+}
+
+/* =========================
+  Typography
+========================= */
+.title {
+  color: var(--black);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.paragraphs {
+  color: var(--gray-700);
+  font-weight: 400;
+  text-align: center;
+}
+
+.links {
+  text-decoration: none;
+  color: var(--black);
+}
+
+/* =========================
+  Visual Components
+========================= */
+.logo {
+  display: block;
+  margin: 0 auto;
+  width: 6rem;
+  height: 6rem;
+  object-fit: contain;
+}
+
+/* =========================
+  Buttons
+========================= */
+.btn {
+  background-color: var(--gray-900);
+  color: var(--white);
+  border: none;
+  border-radius: 3px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: block;
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: var(--gray-700);
+  border-color: var(--gray-600);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.btn:focus-visible {
+  outline: none;
+  border-color: var(--gray-500);
+  box-shadow: 0 0 0 1px rgba(24, 24, 24, 0.5);
+}
+
+.btn:active {
+  background-color: var(--gray-800);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================
+  Inputs
+========================= */
+input,
+select,
+textarea {
+  background-color: var(--gray-100);
+  color: var(--black);
+  border: 1.5px solid var(--gray-700);
+  border-radius: 3px;
+  padding: 0.65rem 0.9rem;
+  font-size: 1rem;
+  font-weight: 400;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  width: 25rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--gray-500);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 4px rgba(3, 53, 1, 0.3);
+}
+
+/* =========================
+   Dividers
+========================= */
+hr {
+  border: none;
+  height: 1.5px;
+  background-color: var(--gray-700);
+  width: 50%;
+  margin: 10px auto;
+}

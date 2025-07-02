@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block head_title %}Título padrão{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    {% block content %}{% endblock %}
+    {% block extra_body %}{% endblock %}
+</body>
+
+</html>

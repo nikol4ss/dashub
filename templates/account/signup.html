@@ -1,0 +1,78 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% load static %}
+
+{% block head_title %}
+  {% trans "Dashub - Signup" %}
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/account.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="half black"></div>
+
+    <div class="half white">
+      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+
+      {% if not SOCIALACCOUNT_ONLY %}
+        <h1 class="title">{% trans "Crie sua conta" %}</h1>
+
+        <p class="paragraphs">Preencha os dados abaixo para criar sua conta.</p>
+
+        {% url 'account_signup' as action_url %}
+
+        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
+          {% slot body %}
+            {% csrf_token %}
+
+            {% for field in form.visible_fields %}
+              {{ field }}
+              {% for error in field.errors %}
+                <p class="error">{{ error }}</p>
+              {% endfor %}
+            {% endfor %}
+
+            {{ redirect_field }}
+
+            {% if form.non_field_errors %}
+              <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                  <div class="error">{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endslot %}
+
+          {% slot actions %}
+            <button class="btn" type="submit">{% trans "Sign Up" %}</button>
+          {% endslot %}
+        {% endelement %}
+
+        <hr>
+
+        <p class="paragraphs">
+          {% url 'account_login' as login_url %}
+          {% setvar link %}<a class="links" href="{{ login_url }}">{% endsetvar %}
+          {% setvar end_link %}</a>{% endsetvar %}
+          {% blocktranslate %}Já tem uma conta? {{ link }}Acesse aqui{{ end_link }}{% endblocktranslate %}
+        </p>
+      {% endif %}
+
+      {% if PASSKEY_SIGNUP_ENABLED %}
+        {% element hr %}{% endelement %}
+        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
+          {% trans "Sign up using a passkey" %}
+        {% endelement %}
+      {% endif %}
+
+      {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

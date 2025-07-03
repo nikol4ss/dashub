@@ -40,11 +40,16 @@ body {
   color: var(--gray-700);
   font-weight: 400;
   text-align: center;
+  width: 80%;
 }
 
 .links {
   text-decoration: none;
-  color: var(--black);
+  color: var(--gray-500);
+}
+
+.links:hover {
+  color: var(--gray-800);
 }
 
 /* =========================
@@ -67,13 +72,13 @@ body {
   border: none;
   border-radius: 3px;
   padding: 0.75rem 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.10);
   display: block;
   width: 100%;
 }
@@ -125,7 +130,7 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--green);
-  box-shadow: 0 0 4px rgba(3, 53, 1, 0.3);
+  box-shadow: 0 0 2px rgba(3, 53, 1, 0.3);
 }
 
 /* =========================
@@ -133,8 +138,8 @@ textarea:focus {
 ========================= */
 hr {
   border: none;
-  height: 1.5px;
+  border-radius: 10%;
+  height: 1px;
   background-color: var(--gray-700);
   width: 50%;
-  margin: 10px auto;
 }

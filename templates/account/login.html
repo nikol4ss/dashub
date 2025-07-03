@@ -1,4 +1,4 @@
-{% extends "account/base_entrance.html" %}
+{% extends "account/base.html" %}
 {% load i18n %}
 {% load allauth account %}
 {% load static %}
@@ -14,6 +14,7 @@
 
 {% block content %}
   <div class="container">
+
     <div class="half black"></div>
 
     <div class="half white">
@@ -31,13 +32,13 @@
           {% slot body %}
             {% csrf_token %}
 
-           {% for field in form.visible_fields %}
-                {% if field.name != "remember" %}
-                    {{ field }}
-                        {% for error in field.errors %}
-                        <p class="error">{{ error }}</p>
-                        {% endfor %}
-                {% endif %}
+            {% for field in form.visible_fields %}
+              {% if field.name != "remember" %}
+                {{ field }}
+                {% for error in field.errors %}
+                  <p class="error">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
             {% endfor %}
 
             {{ redirect_field }}
@@ -49,8 +50,8 @@
                 {% endfor %}
               </div>
             {% endif %}
-
           {% endslot %}
+
           {% slot actions %}
             <button class="btn" type="submit">{% trans "Sign In" %}</button>
           {% endslot %}
@@ -59,31 +60,27 @@
         <hr>
 
         <p class="paragraphs">
+          Esqueceu sua senha?
           <a class="links" href="{{ password_reset_url }}">
-            {% trans "Redefinir senha" %}
+            {{ link }}Clique para recuperar{{ end_link }}
           </a>
         </p>
 
         <p class="paragraphs">
-          {% setvar link %}
-            <a class="links" href="{{ signup_url }}">
-          {% endsetvar %}
+          {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
           {% setvar end_link %}</a>{% endsetvar %}
-          {% blocktranslate %}{{ link }}Criar conta{{ end_link }}{% endblocktranslate %}
+          {% blocktranslate %}Não possui uma conta? {{ link }}Cadastre-se{{ end_link }}{% endblocktranslate %}
         </p>
-
       {% endif %}
 
       {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        {% element hr %}{% endelement %}
-
+        <hr>
         {% element button_group vertical=True %}
           {% if PASSKEY_LOGIN_ENABLED %}
             {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
               {% trans "Sign in with a passkey" %}
             {% endelement %}
           {% endif %}
-
           {% if LOGIN_BY_CODE_ENABLED %}
             {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
               {% trans "Send me a sign-in code" %}
@@ -95,6 +92,14 @@
       {% if SOCIALACCOUNT_ENABLED %}
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
       {% endif %}
+
+      <p class="support">
+        <img src="{% static 'ico/support.svg' %}" alt="support">
+        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
+        {% setvar end_link %}</a>{% endsetvar %}
+        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+      </p>
+
     </div>
   </div>
 {% endblock %}

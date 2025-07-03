@@ -1,0 +1,109 @@
+{% extends "account/base.html" %}
+{% load static allauth i18n %}
+
+{% block head_title %}
+  {% trans "Dashub - Email Addresses" %}
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/account.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="half black"></div>
+
+    <div class="half white">
+      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+
+
+      <h1 class="title">{% trans "Endereços de E-mail" %}</h1>
+
+
+      {% if emailaddresses %}
+        <p class="paragraphs">
+          {% trans 'Os seguintes endereços de e-mail estão associados à sua conta:' %}
+        </p>
+
+        {% url 'account_email' as email_url %}
+        {% element form form=form action=email_url method="post" tags="email,list" %}
+          {% slot body %}
+            {% csrf_token %}
+            <div class="email-list">
+              {% for radio in emailaddress_radios %}
+                {% with emailaddress=radio.emailaddress %}
+                  <label class="email-item" for="{{ radio.id }}">
+                    <input type="radio" name="email" id="{{ radio.id }}" value="{{ emailaddress.email }}" {% if radio.checked %}checked{% endif %}>
+                    <div>
+                      <strong>{{ emailaddress.email }}</strong><br>
+                      {% if emailaddress.verified %}
+                        <span class="badge success">{% trans "Verificado" %}</span>
+                      {% else %}
+                        <span class="badge warning">{% trans "Não verificado" %}</span>
+                      {% endif %}
+                      {% if emailaddress.primary %}
+                        <span class="badge primary">{% trans "Principal" %}</span>
+                      {% endif %}
+                    </div>
+                  </label>
+                {% endwith %}
+              {% endfor %}
+            </div>
+          {% endslot %}
+
+          {% slot actions %}
+            <button class="btn" type="submit" name="action_primary">{% trans "Tornar principal" %}</button>
+            <button class="btn" type="submit" name="action_send">{% trans "Reenviar verificação" %}</button>
+            <button class="btn" type="submit" name="action_remove">{% trans "Remover" %}</button>
+          {% endslot %}
+        {% endelement %}
+      {% else %}
+        {% include "account/snippets/warn_no_email.html" %}
+      {% endif %}
+
+      {% if can_add_email %}
+        <p class="subtitle">{% trans "Adicionar novo e-mail" %}</p>
+        {% url 'account_email' as action_url %}
+        {% element form form=form method="post" action=action_url tags="email,add" %}
+          {% slot body %}
+            {% csrf_token %}
+            {% element fields form=form %}{% endelement %}
+          {% endslot %}
+          {% slot actions %}
+            <button class="btn" name="action_add" type="submit">{% trans "Adicionar e-mail" %}</button>
+          {% endslot %}
+        {% endelement %}
+      {% endif %}
+
+      <div class="ej">
+         <p class="paragraphs">
+          <a class="links" href="{% url 'account_logout' %}">{% trans "Sair" %}</a>
+        </p>
+
+        <p class="paragraphs">
+          <a class="links" href="{% url 'account_login' %}">{% trans "Entrar" %}</a>
+        </p>
+      </div>
+
+      <p class="support">
+        <img src="{% static 'ico/support.svg' %}" alt="support">
+        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
+        {% setvar end_link %}</a>{% endsetvar %}
+        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+      </p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_body %}
+  <script src="{% static 'account/js/account.js' %}"></script>
+  <script src="{% static 'account/js/onload.js' %}"></script>
+  <script data-allauth-onload="allauth.account.forms.manageEmailForm" type="application/json">
+    {
+      "i18n": {
+        "confirmDelete": "{% trans 'Você realmente deseja remover o endereço de e-mail selecionado?' %}"
+      }
+    }
+  </script>
+{% endblock %}

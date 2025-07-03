@@ -1,0 +1,72 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+{% load static %}
+
+{% block head_title %}
+  {% trans "Dashub - Confirm Email" %}
+{% endblock head_title %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/account.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+{% endblock extra_head %}
+
+{% block content %}
+  <div class="container">
+    <div class="half black"></div>
+
+    <div class="half white">
+      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+
+      <h1 class="title">{% trans "Confirmar Endereço de Email" %}</h1>
+
+      {% if confirmation %}
+        {% user_display confirmation.email_address.user as user_display %}
+        {% if can_confirm %}
+          <p class="paragraphs">
+            {% blocktrans with confirmation.email_address.email as email %}
+              Por favor, confirme que <a class="links"  href="mailto:{{ email }}">{{ email }}</a> é um endereço de email para o usuário {{ user_display }}.
+            {% endblocktrans %}
+          </p>
+
+          {% url 'account_confirm_email' confirmation.key as action_url %}
+          {% element form method="post" action=action_url %}
+            {% slot actions %}
+              {% csrf_token %}
+              {{ redirect_field }}
+              <button class="btn" type="submit">{% trans "Confirmar" %}</button>
+            {% endslot %}
+          {% endelement %}
+        {% else %}
+          <p class="paragraphs">
+            {% blocktrans %}
+              Não foi possível confirmar {{ confirmation.email_address.email }} porque já está confirmado em outra conta.
+            {% endblocktrans %}
+          </p>
+        {% endif %}
+      {% else %}
+        {% url 'account_email' as email_url %}
+        <p class="paragraphs">
+          {% blocktrans %}
+            O link de confirmação expirou ou é inválido.
+          {% endblocktrans %}
+        </p>
+
+        <hr>
+
+        <p class="paragraphs">
+          <a class="links" href="{% url 'account_login' %}">Voltar</a>
+        </p>
+      {% endif %}
+
+      <p class="support">
+        <img src="{% static 'ico/support.svg' %}" alt="support">
+        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
+        {% setvar end_link %}</a>{% endsetvar %}
+        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+      </p>
+    </div>
+  </div>
+{% endblock content %}

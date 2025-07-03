@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+
+  <!-- Global e Dashboard CSS -->
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="title" style="color: var(--white);">Menu</h2>
+      <a href="#">Dashboard</a>
+      <a href="#">Relatórios</a>
+      <a href="#">Usuários</a>
+      <a href="#">Configurações</a>
+      <a href="#">Sair</a>
+    </aside>
+
+    <!-- Área principal -->
+    <div class="main-content">
+
+      <!-- Navbar -->
+      <header class="navbar">
+        <span class="title" style="color: var(--white);">Nome do Sistema</span>
+        <span class="paragraphs" style="color: var(--gray-300);">Usuário Logado</span>
+      </header>
+
+      <!-- Conteúdo -->
+      <section class="content-area">
+        <h1 class="title">Bem-vindo</h1>
+        <p class="paragraphs">Aqui é o conteúdo principal do seu dashboard.</p>
+      </section>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,10 +1,10 @@
-{% extends "account/base_entrance.html" %}
+{% extends "account/base.html" %}
 {% load i18n %}
 {% load allauth account %}
 {% load static %}
 
 {% block head_title %}
-  {% trans "Dashub - Signup" %}
+  {% trans "Dashub - Sair" %}
 {% endblock %}
 
 {% block extra_head %}
@@ -19,60 +19,35 @@
     <div class="half white">
       <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
 
-      {% if not SOCIALACCOUNT_ONLY %}
-        <h1 class="title">{% trans "Crie sua conta" %}</h1>
+      <h1 class="title">{% trans "Sair da conta" %}</h1>
 
-        <p class="paragraphs">Preencha os dados abaixo para criar sua conta.</p>
+      {% element p %}
+        {% trans "Tem certeza que deseja sair?" %}
+      {% endelement %}
 
-        {% url 'account_signup' as action_url %}
+      {% url 'account_logout' as action_url %}
+      {% element form method="post" action=action_url no_visible_fields=True tags="logout,entrance" %}
+        {% slot body %}
+          {% csrf_token %}
+          {{ redirect_field }}
+        {% endslot %}
+        {% slot actions %}
+          <button class="btn" type="submit">{% trans "Confirmar saída" %}</button>
+        {% endslot %}
+      {% endelement %}
 
-        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-          {% slot body %}
-            {% csrf_token %}
+      <hr>
 
-            {% for field in form.visible_fields %}
-              {{ field }}
-              {% for error in field.errors %}
-                <p class="error">{{ error }}</p>
-              {% endfor %}
-            {% endfor %}
+      <p class="paragraphs">
+        <a class="links" href="{% url 'account_login' %}">{% trans "Voltar para login" %}</a>
+      </p>
 
-            {{ redirect_field }}
-
-            {% if form.non_field_errors %}
-              <div class="form-errors">
-                {% for error in form.non_field_errors %}
-                  <div class="error">{{ error }}</div>
-                {% endfor %}
-              </div>
-            {% endif %}
-          {% endslot %}
-
-          {% slot actions %}
-            <button class="btn" type="submit">{% trans "Sign Up" %}</button>
-          {% endslot %}
-        {% endelement %}
-
-        <hr>
-
-        <p class="paragraphs">
-          {% url 'account_login' as login_url %}
-          {% setvar link %}<a class="links" href="{{ login_url }}">{% endsetvar %}
-          {% setvar end_link %}</a>{% endsetvar %}
-          {% blocktranslate %}Já tem uma conta? {{ link }}Acesse aqui{{ end_link }}{% endblocktranslate %}
-        </p>
-      {% endif %}
-
-      {% if PASSKEY_SIGNUP_ENABLED %}
-        {% element hr %}{% endelement %}
-        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
-          {% trans "Sign up using a passkey" %}
-        {% endelement %}
-      {% endif %}
-
-      {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-      {% endif %}
+      <p class="support">
+        <img src="{% static 'ico/support.svg' %}" alt="Suporte">
+        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
+        {% setvar end_link %}</a>{% endsetvar %}
+        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+      </p>
     </div>
   </div>
 {% endblock %}

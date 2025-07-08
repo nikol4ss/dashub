@@ -14,8 +14,10 @@ import os
 from pathlib import Path
 from decouple import config
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
 
 load_dotenv()
+
 allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -63,6 +65,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -125,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 TIME_ZONE = "America/Sao_Paulo"
-LANGUAGE_CODE = "pt-br"
+LANGUAGE_CODE = "en-us"
 USE_I18N = True
 USE_TZ = True
 

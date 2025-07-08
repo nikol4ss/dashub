@@ -1,107 +1,47 @@
 {% extends "account/base.html" %}
-{% load i18n %}
-{% load allauth account %}
-{% load static %}
+{% load static allauth account i18n %}
 
 {% block head_title %}
   {% trans "Dashub - Login" %}
 {% endblock %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/account.css' %}">
-  <link rel="stylesheet" href="{% static 'css/global.css' %}">
-{% endblock %}
+{% block account_content %}
 
-{% block content %}
-  <div class="container">
+  {% include "components/account/auth_half_black.html" %}
 
-    <div class="half black"></div>
+  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
 
-    <div class="half white">
-      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
 
-      {% if not SOCIALACCOUNT_ONLY %}
-        <h1 class="title">{% trans "Acesse sua conta" %}</h1>
+    {% if not SOCIALACCOUNT_ONLY %}
+      <h1 class="title">{% trans "Access your account" %}</h1>
 
-        {% url 'account_login' as login_url %}
-        {% url 'account_reset_password' as password_reset_url %}
+      {% url 'account_login' as login_url %}
+      {% url 'account_reset_password' as password_reset_url %}
+      {% url 'account_signup' as signup_url %}
 
-        <p class="paragraphs">Bem-vindo ao Dashub, faça login para continuar.</p>
+      <p class="paragraphs">{% trans "Welcome to Dashub, sign in to continue." %}</p>
 
-        {% element form form=form method="post" action=login_url tags="entrance,login" %}
-          {% slot body %}
-            {% csrf_token %}
+      {% include "components/account/login_form.html" with form=form login_url=login_url %}
 
-            {% for field in form.visible_fields %}
-              {% if field.name != "remember" %}
-                {{ field }}
-                {% for error in field.errors %}
-                  <p class="error">{{ error }}</p>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
+      <hr>
 
-            {{ redirect_field }}
+      {% include "components/account/paragraph_link.html" with label="Forgot your password?" link_text="Click here to recover" href=password_reset_url %}
 
-            {% if form.non_field_errors %}
-              <div class="form-errors">
-                {% for error in form.non_field_errors %}
-                  <div class="error">{{ error }}</div>
-                {% endfor %}
-              </div>
-            {% endif %}
-          {% endslot %}
-
-          {% slot actions %}
-            <button class="btn" type="submit">{% trans "Sign In" %}</button>
-          {% endslot %}
-        {% endelement %}
-
-        <hr>
-
-        <p class="paragraphs">
-          Esqueceu sua senha?
-          <a class="links" href="{{ password_reset_url }}">
-            {{ link }}Clique para recuperar{{ end_link }}
-          </a>
-        </p>
-
-        <p class="paragraphs">
-          {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
-          {% setvar end_link %}</a>{% endsetvar %}
-          {% blocktranslate %}Não possui uma conta? {{ link }}Cadastre-se{{ end_link }}{% endblocktranslate %}
-        </p>
-      {% endif %}
-
-      {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
-        <hr>
-        {% element button_group vertical=True %}
-          {% if PASSKEY_LOGIN_ENABLED %}
-            {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
-              {% trans "Sign in with a passkey" %}
-            {% endelement %}
-          {% endif %}
-          {% if LOGIN_BY_CODE_ENABLED %}
-            {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
-              {% trans "Send me a sign-in code" %}
-            {% endelement %}
-          {% endif %}
-        {% endelement %}
-      {% endif %}
-
-      {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-      {% endif %}
-
-      <p class="support">
-        <img src="{% static 'ico/support.svg' %}" alt="support">
+      <p class="paragraphs">
         {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
         {% setvar end_link %}</a>{% endsetvar %}
-        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+        {% blocktrans %}Don't have an account? {{ link }}Sign up{{ end_link }}{% endblocktrans %}
       </p>
+    {% endif %}
 
-    </div>
+    {% if SOCIALACCOUNT_ENABLED %}
+      {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+
+    {% include "components/account/support_message.html" with href=signup_url %}
   </div>
+
 {% endblock %}
 
 {% block extra_body %}

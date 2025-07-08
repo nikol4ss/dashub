@@ -1,0 +1,9 @@
+{% load allauth account %}
+{% load static %}
+{% load i18n %}
+
+<div class="form-errors">
+  {% for error in errors %}
+    <div class="error">{{ error }}</div>
+  {% endfor %}
+</div>

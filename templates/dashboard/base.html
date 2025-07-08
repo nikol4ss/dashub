@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static allauth account i18n %}
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Dashboard{% endblock %}</title>
+  <link rel="shortcut icon" href="{% static 'ico/dashub_w.png' %}" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+
+<body>
+  <div class="dashboard-container">
+
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <img src="{% static 'ico/dashub_w.png' %}" alt="Dashub">
+
+        <a href="#" class="link_sidebar">
+          <span class="material-icons">dashboard</span>
+          {% trans "Dashboard" %}
+        </a>
+
+        <a href="#" class="link_sidebar">
+          <span class="material-icons">analytics</span>
+          {% trans "Reports" %}
+        </a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <hr class="line">
+        <a href="#" class="link_sidebar">
+          <span class="material-icons">settings</span>
+          {% trans "Settings" %}
+        </a>
+
+        <a href="{% url 'account_logout' %}" class="link_sidebar">
+          <span class="material-icons">exit_to_app</span>
+          {% trans "Logout" %}
+        </a>
+      </div>
+    </aside>
+
+    <div class="main-content">
+
+      <header class="navbar">
+        <div class="navbar-left">
+          {% block navbar_title %}
+            {% if request.resolver_match %}
+              <span class="material-icons">link</span>
+              {{ request.resolver_match.url_name }}
+            {% else %}
+              Página sem nome
+            {% endif %}
+          {% endblock %}
+        </div>
+        <div class="navbar-right">
+          <span class="material-icons">support_agent</span>
+
+          <div style="width: 1px; height: 2rem; background-color: #7a7a7a;"></div>
+
+          {% block navbar_user %}
+            {% if user.is_authenticated %}
+              {{ user.username }}
+            {% else %}
+              User not logged in
+            {% endif %}
+          {% endblock %}
+          <div class="material-icons">account_circle</div>
+        </div>
+      </header>
+
+      <section class="content-area">
+        {% block main_content %}
+        {% endblock %}
+      </section>
+    </div>
+  </div>
+</body>
+</html>

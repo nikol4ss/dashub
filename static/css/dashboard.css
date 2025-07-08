@@ -1,77 +1,83 @@
-/* =========================
-   Layout: Dashboard
-========================= */
+@import url('global.css');
 
-/* Container principal */
+/* =========================
+  Layout: Dashboard
+========================= */
 .dashboard-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--gray-50);
-  font-family: 'Inter', sans-serif; /* fonte moderna */
+  font-family: 'Inter', sans-serif;
   color: var(--gray-900);
 }
 
-/* Sidebar lateral */
+/* =========================
+  Sidebar
+========================= */
 .sidebar {
-  width: 260px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 13rem;
+  height: 100vh;
   background-color: var(--gray-900);
   color: var(--white);
   display: flex;
   flex-direction: column;
-  padding: 2rem 1.5rem;
+  justify-content: space-between;
+  padding: 2rem 1rem;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  user-select: none;
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
-/* Título Sidebar */
-.sidebar .title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  letter-spacing: 1px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding-bottom: 0.75rem;
+.sidebar img {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.3rem;
 }
 
-/* Links Sidebar */
-.sidebar a {
+.sidebar-top,
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.link_sidebar {
   color: var(--gray-300);
   text-decoration: none;
-  margin-bottom: 1.25rem;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1rem;
+  padding: 1rem 0.75rem;
+  border-radius: 3px;
   transition: color 0.3s ease, background-color 0.2s ease;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* Hover e foco */
-.sidebar a:hover,
-.sidebar a:focus {
+.link_sidebar:hover,
+.link_sidebar:focus {
   color: var(--white);
   background-color: rgba(255, 255, 255, 0.1);
-  outline: none;
   cursor: pointer;
 }
 
-/* Link ativo (exemplo) */
-.sidebar a.active {
-  color: var(--white);
-  background-color: var(--primary);
-  box-shadow: 0 0 10px var(--primary);
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--gray-600);
 }
 
-/* Conteúdo principal */
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--gray-50);
-}
-
-/* Navbar superior */
+/* =========================
+  Navbar
+========================= */
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 13rem;
+  right: 0;
   height: 64px;
   background-color: var(--gray-800);
   color: var(--white);
@@ -80,32 +86,50 @@
   justify-content: space-between;
   padding: 0 2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  font-weight: 600;
-  user-select: none;
+  font-weight: 400;
+  z-index: 999;
 }
 
-/* Área principal (conteúdo abaixo da navbar) */
+.navbar-left {
+  font-weight: 500;
+  font-size: 1.1rem;
+  gap: 0.3rem;
+  display: flex;
+  align-items: center;
+  color: var(--gray-300);
+}
+
+.navbar-right {
+  font-weight: 400;
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  color: var(--gray-300);
+  cursor: pointer;
+}
+
+.navbar-right span {
+  margin-right: 0.5rem;
+}
+
+/* =========================
+  Main
+========================= */
+.main-content {
+  margin-left: 13rem;
+  margin-top: 64px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-50);
+}
+
 .content-area {
   flex-grow: 1;
   padding: 2.5rem 3rem;
   background-color: var(--white);
   overflow-y: auto;
+  min-height: calc(100vh - 64px);
   border-top-left-radius: 12px;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.02);
 }
-
-/* Título da página */
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--gray-900);
-  margin-bottom: 1rem;
-}
-
-/* Parágrafos */
-.paragraphs {
-  font-size: 1.1rem;
-  color: var(--gray-700);
-  line-height: 1.6;
-}
-

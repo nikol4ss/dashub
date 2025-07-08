@@ -5,11 +5,11 @@
 ## Features
 
 - Authentication (registration, login, logout, password reset)
-- Clean interface with responsive template ( - )
+- Clean interface with responsive template Django templates
 - Full dashboard CRUD
 - External database connection via SQLAlchemy
 - Data reading and processing with Pandas
-- Interactive chart generation ( - )
+- Interactive chart generation Plotly
 - Full isolation between internal and external data
 - Modularization and component reuse
 

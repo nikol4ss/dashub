@@ -1,0 +1,29 @@
+{% load allauth account %}
+{% load static %}
+{% load i18n %}
+
+{% element form form=form method="post" action=login_url tags="entrance,login" %}
+  {% slot body %}
+    {% csrf_token %}
+    {% for field in form.visible_fields %}
+      {% if field.name != "remember" %}
+        {{ field }}
+        {% for error in field.errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    {{ redirect_field }}
+
+    {% if form.non_field_errors %}
+      {% include "components/account/form_errors.html" with errors=form.non_field_errors %}
+    {% endif %}
+  {% endslot %}
+
+  {% slot actions %}
+    {% load i18n %}
+    <button class="btn" type="submit">
+      Sign in
+    </button>
+  {% endslot %}
+{% endelement %}

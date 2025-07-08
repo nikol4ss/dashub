@@ -1,53 +1,45 @@
 {% extends "account/base.html" %}
-{% load i18n %}
-{% load allauth account %}
-{% load static %}
+{% load static allauth account i18n %}
 
 {% block head_title %}
-  {% trans "Dashub - Sair" %}
+  {% trans "Dashub - Signup" %}
 {% endblock %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/account.css' %}">
-  <link rel="stylesheet" href="{% static 'css/global.css' %}">
-{% endblock %}
+{% block account_content %}
 
-{% block content %}
-  <div class="container">
-    <div class="half black"></div>
+  {% include "components/account/auth_half_black.html" %}
 
-    <div class="half white">
-      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
 
-      <h1 class="title">{% trans "Sair da conta" %}</h1>
+    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
 
-      {% element p %}
-        {% trans "Tem certeza que deseja sair?" %}
-      {% endelement %}
+    {% if not SOCIALACCOUNT_ONLY %}
+      <h1 class="title">{% trans "Create your account" %}</h1>
 
-      {% url 'account_logout' as action_url %}
-      {% element form method="post" action=action_url no_visible_fields=True tags="logout,entrance" %}
-        {% slot body %}
-          {% csrf_token %}
-          {{ redirect_field }}
-        {% endslot %}
-        {% slot actions %}
-          <button class="btn" type="submit">{% trans "Confirmar saída" %}</button>
-        {% endslot %}
-      {% endelement %}
+      <p class="paragraphs">{% trans "Fill in the details below to create your account." %}</p>
+
+      {% url 'account_signup' as action_url %}
+
+      {% include "components/account/signup_form.html" with form=form action_url=action_url %}
 
       <hr>
 
-      <p class="paragraphs">
-        <a class="links" href="{% url 'account_login' %}">{% trans "Voltar para login" %}</a>
-      </p>
+      {% url 'account_login' as login_url %}
+      {% include "components/account/paragraph_link.html" with label="Already have an account?" link_text="Sign in here" href=login_url %}
+    {% endif %}
 
-      <p class="support">
-        <img src="{% static 'ico/support.svg' %}" alt="Suporte">
-        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
-        {% setvar end_link %}</a>{% endsetvar %}
-        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
-      </p>
-    </div>
+    {% if PASSKEY_SIGNUP_ENABLED %}
+      <hr>
+      {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
+        {% trans "Sign up using a passkey" %}
+      {% endelement %}
+    {% endif %}
+
+    {% if SOCIALACCOUNT_ENABLED %}
+      {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+
+    {% include "components/account/support_message.html" with href=signup_url %}
   </div>
+
 {% endblock %}

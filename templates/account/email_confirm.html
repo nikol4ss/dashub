@@ -1,72 +1,50 @@
 {% extends "account/base.html" %}
-{% load i18n %}
-{% load account %}
-{% load allauth %}
-{% load static %}
+{% load i18n allauth account static %}
 
 {% block head_title %}
   {% trans "Dashub - Confirm Email" %}
-{% endblock head_title %}
+{% endblock %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/account.css' %}">
-  <link rel="stylesheet" href="{% static 'css/global.css' %}">
-{% endblock extra_head %}
+{% block account_content %}
+  {% include "components/account/auth_half_black.html" %}
 
-{% block content %}
-  <div class="container">
-    <div class="half black"></div>
+  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
+    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+    <h1 class="title">{% trans "Confirm Email Address" %}</h1>
 
-    <div class="half white">
-      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
-
-      <h1 class="title">{% trans "Confirmar Endereço de Email" %}</h1>
-
-      {% if confirmation %}
-        {% user_display confirmation.email_address.user as user_display %}
-        {% if can_confirm %}
-          <p class="paragraphs">
-            {% blocktrans with confirmation.email_address.email as email %}
-              Por favor, confirme que <a class="links"  href="mailto:{{ email }}">{{ email }}</a> é um endereço de email para o usuário {{ user_display }}.
-            {% endblocktrans %}
-          </p>
-
-          {% url 'account_confirm_email' confirmation.key as action_url %}
-          {% element form method="post" action=action_url %}
-            {% slot actions %}
-              {% csrf_token %}
-              {{ redirect_field }}
-              <button class="btn" type="submit">{% trans "Confirmar" %}</button>
-            {% endslot %}
-          {% endelement %}
-        {% else %}
-          <p class="paragraphs">
-            {% blocktrans %}
-              Não foi possível confirmar {{ confirmation.email_address.email }} porque já está confirmado em outra conta.
-            {% endblocktrans %}
-          </p>
-        {% endif %}
-      {% else %}
-        {% url 'account_email' as email_url %}
+    {% if confirmation %}
+      {% user_display confirmation.email_address.user as user_display %}
+      {% if can_confirm %}
         <p class="paragraphs">
-          {% blocktrans %}
-            O link de confirmação expirou ou é inválido.
+          {% blocktrans with email=confirmation.email_address.email user=user_display %}
+            Please confirm that <a class="links" href="mailto:{{ email }}">{{ email }}</a> is an email address for user {{ user }}.
           {% endblocktrans %}
         </p>
 
-        <hr>
-
+        {% url 'account_confirm_email' confirmation.key as action_url %}
+        {% element form method="post" action=action_url %}
+          {% slot actions %}
+            {% csrf_token %}
+            {{ redirect_field }}
+            <button class="btn" type="submit">{% trans "Confirm" %}</button>
+          {% endslot %}
+        {% endelement %}
+      {% else %}
         <p class="paragraphs">
-          <a class="links" href="{% url 'account_login' %}">Voltar</a>
+          {% blocktrans with email=confirmation.email_address.email %}
+            Could not confirm {{ email }} because it is already confirmed on another account.
+          {% endblocktrans %}
         </p>
       {% endif %}
+    {% else %}
+      <p class="paragraphs">{% trans "The confirmation link has expired or is invalid." %}</p>
 
-      <p class="support">
-        <img src="{% static 'ico/support.svg' %}" alt="support">
-        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
-        {% setvar end_link %}</a>{% endsetvar %}
-        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
+      <hr>
+      <p class="paragraphs">
+        <a class="links" href="{% url 'account_login' %}">{% trans "Back" %}</a>
       </p>
-    </div>
+    {% endif %}
+
+    {% include "components/account/support_message.html" with href=signup_url %}
   </div>
-{% endblock content %}
+{% endblock %}

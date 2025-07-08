@@ -1,0 +1,4 @@
+<form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" style="display:none;">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{% url 'account_login' %}">
+</form>

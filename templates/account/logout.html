@@ -1,43 +1,28 @@
 {% extends "account/base.html" %}
-{% load i18n %}
-{% load allauth account %}
-{% load static %}
+{% load i18n allauth account static %}
 
 {% block head_title %}
-  {% trans "Dashub - Sair" %}
+  {% trans "Dashub - Logout" %}
 {% endblock %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/account.css' %}">
-  <link rel="stylesheet" href="{% static 'css/global.css' %}">
-{% endblock %}
+{% block account_content %}
+  {% include "components/account/auth_half_black.html" %}
 
-{% block content %}
-  <div class="container">
-    <div class="half black"></div>
+  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
+    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+    <h1 class="title">{% trans "Are you sure you want to log out?" %}</h1>
 
-    <div class="half white">
-      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+    {% url 'account_logout' as action_url %}
+    <form method="post" action="{{ action_url }}">
+      {% csrf_token %}
+      {{ redirect_field }}
+      <button class="btn" type="submit">{% trans "Confirm Logout" %}</button>
+    </form>
 
-      <h1 class="title">{% trans "Tem certeza que deseja sair?" %}</h1>
+    <p class="paragraphs">
+       <a class="links" href="javascript:history.back()">{% trans "Back" %}</a>
+    </p>
 
-      {% url 'account_logout' as action_url %}
-      <form method="post" action="{{ action_url }}">
-        {% csrf_token %}
-        {{ redirect_field }}
-        <button class="btn" type="submit">{% trans "Confirmar saída" %}</button>
-      </form>
-
-      <p class="paragraphs">
-        <a class="links" href="{% url 'account_email' %}">{% trans "Voltar" %}</a>
-      </p>
-
-      <p class="support">
-        <img src="{% static 'ico/support.svg' %}" alt="support">
-        {% setvar link %}<a class="links" href="{{ signup_url }}">{% endsetvar %}
-        {% setvar end_link %}</a>{% endsetvar %}
-        {% blocktranslate %}Precisa de ajuda? {{ link }}Acesse o suporte{{ end_link }}{% endblocktranslate %}
-      </p>
-    </div>
+    {% include "components/account/support_message.html" with href=signup_url %}
   </div>
 {% endblock %}

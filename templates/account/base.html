@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block head_title %}Dashub{% endblock %}</title>
-    {% load static %}
-    <link rel="shortcut icon" href="{% static 'ico/dashub_w.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    {% block extra_head %}{% endblock %}
-</head>
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/account.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+  {{ block.super }}
+{% endblock %}
 
-<body>
-    {% block content %}{% endblock %}
-    {% block extra_body %}{% endblock %}
-</body>
-
-</html>
+{% block content %}
+  <div class="container">
+    {% block account_content %}{% endblock %}
+  </div>
+{% endblock %}

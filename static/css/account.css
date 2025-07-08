@@ -63,6 +63,11 @@ input {
   margin-bottom: 20px;
 }
 
+.btn-link {
+  color: var(--white);
+  text-decoration: none;
+}
+
 /* ========================
   Error Messages
 ======================== */

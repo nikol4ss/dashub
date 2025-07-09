@@ -68,7 +68,7 @@ body {
 ========================= */
 .btn {
   background-color: var(--gray-900);
-  color: var(--white);
+  color: var(--gray-300);
   font-size: 1rem;
   border: none;
   border-radius: 3px;

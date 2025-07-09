@@ -7,8 +7,8 @@
   <title>{% block title %}Dashboard{% endblock %}</title>
   <link rel="shortcut icon" href="{% static 'ico/dashub_w.png' %}" type="image/x-icon">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
   <link rel="stylesheet" href="{% static 'css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 
 <body>
@@ -25,7 +25,7 @@
 
         <a href="#" class="link_sidebar">
           <span class="material-icons">analytics</span>
-          {% trans "Reports" %}
+          {% trans "Workbench" %}
         </a>
       </div>
 
@@ -44,7 +44,6 @@
     </aside>
 
     <div class="main-content">
-
       <header class="navbar">
         <div class="navbar-left">
           {% block navbar_title %}
@@ -58,9 +57,7 @@
         </div>
         <div class="navbar-right">
           <span class="material-icons">support_agent</span>
-
           <div style="width: 1px; height: 2rem; background-color: #7a7a7a;"></div>
-
           {% block navbar_user %}
             {% if user.is_authenticated %}
               {{ user.username }}

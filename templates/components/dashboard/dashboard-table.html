@@ -1,0 +1,29 @@
+{% load static allauth account i18n %}
+<div class="dashboard-table">
+  <table>
+    <thead>
+      <tr>
+        <th><span class="th-content"><span class="material-icons">analytics</span> {% trans "Name" %}</span></th>
+        <th><span class="th-content"><span class="material-icons">check_circle</span> {% trans "Status" %}</span></th>
+        <th><span class="th-content"><span class="material-icons">storage</span> {% trans "Database" %}</span></th>
+        <th><span class="th-content"><span class="material-icons">update</span> {% trans "Updates" %}</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Onebeat Sales 2025</td>
+        <td><span class="badge published">Published</span></td>
+        <td>PostgreSQL</td>
+        <td>08/07/2025</td>
+        <td class="tools-cell">
+          <button class="btn"><span class="material-icons">edit</span></button>
+          <button class="btn"><span class="material-icons">delete</span></button>
+          <button class="btn"><span class="material-icons">visibility</span></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+

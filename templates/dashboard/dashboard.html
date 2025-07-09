@@ -1,13 +1,9 @@
 {% extends 'dashboard/base.html' %}
+{% load static allauth account i18n %}
 
 {% block main_content %}
 <section class="content-area">
-  <h1 class="title">Bem-vindo</h1>
-  <p class="paragraphs">Aqui é o conteúdo principal do seu dashboard.</p>
-</section>
-
-<section class="content-area">
-  <h1 class="title">Outro bloco</h1>
-  <p class="paragraphs">Outro conteúdo se necessasdadasdário.</p>
+  <div class="spacer"></div>
+  {% include 'components/dashboard/dashboard-table.html' %}
 </section>
 {% endblock %}

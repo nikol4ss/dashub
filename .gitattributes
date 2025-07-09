@@ -1,2 +1,2 @@
-*.html linguist-language=Text
 *.html linguist-vendored
+*.css linguist-vendored

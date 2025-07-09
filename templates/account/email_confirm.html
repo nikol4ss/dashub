@@ -1,15 +1,9 @@
 {% extends "account/base.html" %}
 {% load i18n allauth account static %}
 
-{% block head_title %}
-  {% trans "Dashub - Confirm Email" %}
-{% endblock %}
+{% block head_title %}{% trans "Dashub - Confirm Email" %}{% endblock %}
 
 {% block account_content %}
-  {% include "components/account/auth_half_black.html" %}
-
-  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
-    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
     <h1 class="title">{% trans "Confirm Email Address" %}</h1>
 
     {% if confirmation %}
@@ -37,14 +31,15 @@
         </p>
       {% endif %}
     {% else %}
-      <p class="paragraphs">{% trans "The confirmation link has expired or is invalid." %}</p>
 
-      <hr>
-      <p class="paragraphs">
-        <a class="links" href="{% url 'account_login' %}">{% trans "Back" %}</a>
-      </p>
+    <p class="paragraphs">{% trans "The confirmation link has expired or is invalid." %}</p>
+
+    <hr>
+
+    <p class="paragraphs">
+      <a class="links" href="{% url 'account_login' %}">{% trans "Back" %}</a>
+    </p>
+
     {% endif %}
-
     {% include "components/account/support_message.html" with href=signup_url %}
-  </div>
 {% endblock %}

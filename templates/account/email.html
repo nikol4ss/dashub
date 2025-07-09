@@ -1,15 +1,9 @@
 {% extends "account/base.html" %}
 {% load static allauth i18n %}
 
-{% block head_title %}
-  {% trans "Dashub - Email Addresses" %}
-{% endblock %}
+{% block head_title %}{% trans "Dashub - Email Addresses" %}{% endblock %}
 
 {% block account_content %}
-  {% include "components/account/auth_half_black.html" %}
-
-  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
-    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub" />
     <h1 class="title">{% trans "Email Addresses" %}</h1>
 
     {% if emailaddresses %}
@@ -65,7 +59,6 @@
 
     {% url 'account_signup' as signup_url %}
     {% include "components/account/support_message.html" with href=signup_url %}
-  </div>
 {% endblock %}
 
 {% block extra_body %}

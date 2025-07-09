@@ -1,18 +1,9 @@
 {% extends "account/base.html" %}
 {% load static allauth account i18n %}
 
-{% block head_title %}
-  {% trans "Dashub - Login" %}
-{% endblock %}
+{% block head_title %}{% trans "Dashub - Login" %}{% endblock %}
 
 {% block account_content %}
-
-  {% include "components/account/auth_half_black.html" %}
-
-  <div class="half white"> {% comment %} DYNAMIC {% endcomment %}
-
-    <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
-
     {% if not SOCIALACCOUNT_ONLY %}
       <h1 class="title">{% trans "Access your account" %}</h1>
 
@@ -40,8 +31,6 @@
     {% endif %}
 
     {% include "components/account/support_message.html" with href=signup_url %}
-  </div>
-
 {% endblock %}
 
 {% block extra_body %}

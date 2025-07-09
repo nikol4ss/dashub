@@ -9,6 +9,12 @@
 
 {% block content %}
   <div class="container">
-    {% block account_content %}{% endblock %}
+    {% include "components/account/auth_half_black.html" %}
+
+    <div class="half white">
+      <img class="logo" src="{% static 'ico/dashub.svg' %}" alt="Dashub">
+
+      {% block account_content %}{% endblock %}
+    </div>
   </div>
 {% endblock %}

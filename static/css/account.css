@@ -17,7 +17,7 @@ body,
 
 .half.black {
   flex: 4;
-  background-color: var(--black);
+  background-color: var(--gray-900);
   padding: 1rem;
 }
 

@@ -1,6 +1,10 @@
 # Dashub — Customizable Dashboard with Django
 
 > This project aims to simplify and accelerate the creation of customizable dashboards based on external data provided by the user. The platform allows any user to connect their own database, select tables and columns, apply basic operations (such as sum, average, count), and visualize the data using charts — all in a simple, modular, and reusable way. The system is designed to ensure independence between the application’s internal database and the user's data, maintaining a clean and scalable architecture.
+---
+<p align="center">
+  <img src="static/ico/dashub_w.png" alt="Dashub Logo" />
+</p>
 
 ## Features
 
@@ -17,9 +21,9 @@
 
 - **Backend:** Django + SQLAlchemy
 - **Data Processing:** Pandas
-- **Charts:** -
-- **Frontend:** -
-- **Internal Database:** SQLite
+- **Charts:** Plotly
+- **Frontend:** Django templates
+- **Internal Database:** SQLserver
 
 ## License
 

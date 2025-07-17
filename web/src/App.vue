@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import myDashboardTest from './components/myDashboardTest.vue';
+import { Toaster } from '@/components/ui/sonner'
+import 'vue-sonner/style.css'  
 </script>
 
 <template>
-  <HelloWorld msg="Vite + Vue" />
-  <myDashboardTest />
+  <Toaster class="pointer-events-auto" />
+  <router-view />
 </template>
-

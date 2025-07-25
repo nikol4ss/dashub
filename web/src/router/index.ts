@@ -4,7 +4,7 @@ import Login from '@/pages/auth/Login.vue'
 import Signup from '@/pages/auth/Signup.vue'
 
 const routes = [
-  { path: '/login/', name: 'Login', component: Login },
+  { path: '/login/', name: 'Login', component: Login, meta: { title: 'Dashub - Login' },},
   { path: '/signup/', name: 'Signup', component: Signup },
 ]
 

@@ -13,6 +13,5 @@ const props = defineProps<ToasterProps>()
       '--normal-text': 'var(--popover-foreground)',
       '--normal-border': 'var(--border)',
 
-    }"
-  />
+    }"/>
 </template>

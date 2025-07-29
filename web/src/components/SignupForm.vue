@@ -21,28 +21,21 @@ const form = reactive({
 
 async function formSignup() {
   try {
-    const response = await axios.post('/api/signup/', form);
-
-    response.data
-
-    toast.success("User Created", {
-      description: "Signup successful"
-    });
+    await axios.post('/api/signup/', form);
 
   } catch (err: any) {
     const data = err.response?.data;
 
     if (data && typeof data === 'object') {
-      const result = Object.entries(data)
-        .flatMap(([_, messages]) => messages as string[])
-        .join('    ');
-
-      toast.warning(result)
+      Object.entries(data).forEach(([_, messages]) => {
+        (messages as string[]).forEach(msg => {
+          toast.warning(msg);
+        });
+      });
+      
     } else {
-      toast.error(err)
+      toast.error(err);
     }
-
-    console.log(err.response);
   }
 }
 

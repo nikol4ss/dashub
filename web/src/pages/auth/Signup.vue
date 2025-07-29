@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SignupForm from '@/components/SignupForm.vue';
-import ToggleTheme from '@/components/ToggleTheme.vue';
+import SignupForm from '@/components/auth/SignupForm.vue';
+import ToggleTheme from '@/components/shared/ToggleTheme.vue';
 </script>
 
 <template>

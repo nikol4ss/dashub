@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LoginForm from '@/components/LoginForm.vue';
-import ToggleTheme from '@/components/ToggleTheme.vue';
+import LoginForm from '@/components/auth/LoginForm.vue';
+import ToggleTheme from '@/components/shared/ToggleTheme.vue';
 </script>
 
 <template>

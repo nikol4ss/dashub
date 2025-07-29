@@ -3,13 +3,12 @@ import { jwtDecode } from 'jwt-decode'
 
 import Login from '@/pages/auth/Login.vue'
 import Signup from '@/pages/auth/Signup.vue'
-import Dashboard from '@/pages/home/Dashboard.vue'
-
+import MainLayout from '@/pages/layout/MainLayout.vue'
 
 const routes = [
   { path: '/login/', name: 'Login', component: Login, meta: { title: 'Dashub - Login' } },
   { path: '/signup/', name: 'Signup', component: Signup },
-  { path: '/dashboard/', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } }
+  { path: '/dashboard/', name: 'Dashboard', component: MainLayout, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({
@@ -19,6 +18,10 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem('access_token')
+
+  if (to.path === '/login/' && token) {
+    return next('/dashboard/')
+  }
 
   if (to.meta.requiresAuth) {
     if (!token) return next('/login/')

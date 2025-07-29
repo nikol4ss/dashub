@@ -1,10 +1,20 @@
-from django.contrib.auth.models import User
-from rest_framework import serializers
-
 import re
+
+from django.contrib.auth.models import User
+
+from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Django's User model.
+
+    - Serializes basic user fields.
+    - Validates input data like names, username, and password.
+    - Enforces password security rules (length, character types, etc).
+    - Creates a user with a hashed password.
+    """
+
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -12,7 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "username", "email", "password"]
 
     def validate_first_name(self, value):
-
+        """
+        Validate first name, allowing only letters A-Z.
+        """
         if not re.fullmatch(r"[A-Za-z]+", value):
             raise serializers.ValidationError(
                 "Invalid name: only letters (A-Z) are allowed."
@@ -20,7 +32,9 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate_last_name(self, value):
-
+        """
+        Validate last name, allowing only letters A-Z.
+        """
         if not re.fullmatch(r"[A-Za-z]+", value):
             raise serializers.ValidationError(
                 "Invalid surname: only letters (A-Z) are allowed."
@@ -28,12 +42,15 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate_username(self, value):
-
-        if not re.search(R"\d", value):
+        """
+        Validate username:
+        - Must contain at least one number.
+        - Must be at least 8 characters long.
+        """
+        if not re.search(r"\d", value):
             raise serializers.ValidationError(
-                "Invalid username: only letters and numbers are allowed."
+                "Invalid username: must contain at least one number."
             )
-
         elif len(value) < 8:
             raise serializers.ValidationError(
                 "Invalid username: must contain at least 8 characters."
@@ -41,37 +58,40 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate_password(self, value):
-
+        """
+        Validate password with rules:
+        - Minimum 8 characters
+        - Must contain uppercase and lowercase letters
+        - Must contain at least one number
+        - Must contain at least one special character
+        - Cannot contain spaces
+        """
         if len(value) < 8:
             raise serializers.ValidationError(
                 "Invalid password: must contain at least 8 characters."
             )
-
-        elif not any(field.isupper() for field in value) or not any(
-            field.islower() for field in value
-        ):
+        if not any(c.isupper() for c in value) or not any(c.islower() for c in value):
             raise serializers.ValidationError(
                 "Invalid password: must contain both uppercase and lowercase letters."
             )
-
-        elif not any(field.isdigit() for field in value):
+        if not any(c.isdigit() for c in value):
             raise serializers.ValidationError(
                 "Invalid password: must contain at least one number."
             )
-
-        elif not re.search(r"[!@#$%^&*(),.?\":{}|<>]", value):
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", value):
             raise serializers.ValidationError(
                 "Invalid password: must contain at least one special character."
             )
-
-        elif " " in value:
+        if " " in value:
             raise serializers.ValidationError(
                 "Invalid password: cannot contain spaces."
             )
-
         return value
 
     def create(self, validated_data):
+        """
+        Create a new user with the password properly hashed.
+        """
         user = User(
             first_name=validated_data.get("first_name"),
             last_name=validated_data.get("last_name"),

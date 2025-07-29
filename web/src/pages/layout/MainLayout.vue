@@ -1,16 +1,8 @@
-<script lang="ts">
-export const description
-    = 'A sidebar that collapses to icons.'
-export const iframeHeight = '800px'
-export const containerClass = 'w-full h-full'
-</script>
-
 <script setup lang="ts">
-import AppSidebar from '@/components/AppSidebar.vue'
-import ToggleTheme from '@/components/ToggleTheme.vue'
+import AppSidebar from '@/components/layout/AppSidebar.vue'
+import ToggleTheme from '@/components/shared/ToggleTheme.vue'
 
 import { Separator } from '@/components/ui/separator'
-
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -19,19 +11,34 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
 
-import api from '@/lib/utils'
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getDashboard } from '@/services/api'
 
-onMounted(async () => {
-    const res = await api.get('api/dashboard/')
-    console.log(res.data)
+// Exportações de metadados
+const description = 'A sidebar that collapses to icons.'
+const iframeHeight = '800px'
+const containerClass = 'w-full h-full'
+
+defineExpose({
+    description,
+    iframeHeight,
+    containerClass,
+})
+
+// Reatividade
+const accessToken = 'seu_token_aqui'
+const data = ref(null)
+
+onMounted(() => {
+    getDashboard(accessToken).then(res => {
+        data.value = res.data
+    })
 })
 </script>
 

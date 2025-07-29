@@ -1,49 +1,24 @@
 <script setup lang="ts">
 import 'vue-sonner/style.css'
-import { toast } from 'vue-sonner'
 
 import { Toaster } from 'vue-sonner'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
+
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
-import axios from 'axios';
-import { reactive } from 'vue';
+import { form } from '@/models/userSignupForm'
+import { formSignup } from '@/services/api'
 
 
-const form = reactive({
-  first_name: "",
-  last_name: "",
-  username: "",
-  email: "",
-  password: "",
-})
-
-async function formSignup() {
-  try {
-    await axios.post('/api/signup/', form);
-
-  } catch (err: any) {
-    const data = err.response?.data;
-
-    if (data && typeof data === 'object') {
-      Object.entries(data).forEach(([_, messages]) => {
-        (messages as string[]).forEach(msg => {
-          toast.warning(msg);
-        });
-      });
-      
-    } else {
-      toast.error(err);
-    }
-  }
+function handleSubmit() {
+  formSignup(form)
 }
-
 </script>
 
 <template>
   <Toaster richColors />
-  <form @submit.prevent="formSignup" class="flex flex-col gap-6 max-w-sm mx-auto">
+  <form @submit.prevent="handleSubmit" class="flex flex-col gap-6 max-w-sm mx-auto">
 
     <div class="flex flex-col items-center gap-2 text-center">
       <h1 class="text-2xl font-bold">

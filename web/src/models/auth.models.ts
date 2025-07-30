@@ -8,10 +8,20 @@ export type SignupForm = {
   password: string
 }
 
-export const form = reactive<SignupForm>({
+export type LoginForm = {
+  username: string
+  password: string
+}
+
+export const modelSignup = reactive<SignupForm>({
   first_name: "",
   last_name: "",
   username: "",
   email: "",
+  password: "",
+})
+
+export const modelLogin = reactive<LoginForm>({
+  username: "",
   password: "",
 })

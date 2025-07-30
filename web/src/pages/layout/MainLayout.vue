@@ -2,6 +2,7 @@
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import ToggleTheme from '@/components/shared/ToggleTheme.vue'
 
+import { Toaster } from 'vue-sonner'
 import { Separator } from '@/components/ui/separator'
 import {
     Breadcrumb,
@@ -11,16 +12,29 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
 
-import { ref, onMounted } from 'vue'
-import { getDashboard } from '@/services/api'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
-// Exportações de metadados
+import { onMounted, onUnmounted, ref } from 'vue'
+import { jwtDecode } from 'jwt-decode'
+import { getCentral } from '@/services/api'
+import { logout } from '@/services/api'
+
 const description = 'A sidebar that collapses to icons.'
 const iframeHeight = '800px'
 const containerClass = 'w-full h-full'
@@ -31,18 +45,42 @@ defineExpose({
     containerClass,
 })
 
-// Reatividade
-const accessToken = 'seu_token_aqui'
-const data = ref(null)
+const centralData = ref<any>(null)
+const backClicked = ref(false)
+
+function handlePopState() {
+    backClicked.value = true
+}
 
 onMounted(() => {
-    getDashboard(accessToken).then(res => {
-        data.value = res.data
-    })
+    window.addEventListener('popstate', handlePopState)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', handlePopState)
+})
+
+onMounted(async () => {
+    const token = localStorage.getItem('access_token')
+    if (!token) return
+
+    try {
+        const decoded = jwtDecode<{ exp: number }>(token)
+        if (Date.now() >= decoded.exp * 1000) {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            return
+        }
+
+        centralData.value = await getCentral()
+    } catch (err) {
+        console.log('Erro ao carregar central:', err)
+    }
 })
 </script>
 
 <template>
+    <Toaster richColors theme="dark" position="bottom-center" />
     <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
@@ -78,5 +116,24 @@ onMounted(() => {
                 <div class="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
             </div>
         </SidebarInset>
+        <AlertDialog :open="backClicked">
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        If you log out, your current session will be terminated, and you will need to authenticate
+                        again
+                        to access
+                        your account. Logging out also allows you to switch between different user accounts
+                        securely.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel @click="backClicked = false">Cancel</AlertDialogCancel>
+                    <AlertDialogAction @click="logout">Continue</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+
     </SidebarProvider>
 </template>

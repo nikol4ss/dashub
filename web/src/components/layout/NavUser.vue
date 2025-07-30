@@ -43,8 +43,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 import { ref } from 'vue'
-
-import { useRouter } from 'vue-router'
+import { logout } from '@/services/api'
 
 defineProps<{
   user: {
@@ -56,13 +55,6 @@ defineProps<{
 
 const { isMobile } = useSidebar()
 const openDialog = ref(false)
-const router = useRouter()
-
-const logout = () => {
-  localStorage.removeItem('access_token')
-  localStorage.removeItem('refresh_token')
-  router.push('/login/')
-}
 </script>
 
 <template>

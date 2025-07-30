@@ -26,7 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # API -> Core
-    path("api/", include(router.urls)),
+    path("", include(router.urls)),
 
     # API -> Auth (JWT)
     path("api/signup/", Signup.as_view(), name="signup"),
@@ -34,7 +34,7 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
     # API -> Browsable login (DRF)
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("api", include("rest_framework.urls", namespace="rest_framework")),
 
     # API -> Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
@@ -42,7 +42,6 @@ urlpatterns = [
     # API -> Apps
     path("api/central/", CentralView.as_view(), name="Central"),
 ]
-
 
 # Static files & Catch-all route (SPA)
 

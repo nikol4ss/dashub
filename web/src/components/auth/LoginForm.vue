@@ -1,30 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { HTMLAttributes } from 'vue'
 
 import { Toaster } from 'vue-sonner'
-
-import { cn } from '@/lib/utils'
-import { postLogin } from '@/services/api'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { cn } from '@/lib/utils'
+import { modelLogin } from '@/models/auth.models'
+import { postLogin } from '@/services/api'
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+
 const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
 
-const username = ref('')
-const password = ref('')
-
 function handleSubmit() {
-  postLogin(username.value, password.value)
+  postLogin(modelLogin)
 }
 </script>
 
 <template>
-  <Toaster richColors />
+  <Toaster richColors theme="dark" />
   <form :class="cn('flex flex-col gap-6 max-w-sm mx-auto', props.class)" @submit.prevent="handleSubmit">
     <div class="flex flex-col items-center gap-2 text-center">
       <h1 class="text-2xl font-bold">Login to your account</h1>
@@ -36,16 +42,29 @@ function handleSubmit() {
     <div class="grid gap-6">
       <div class="grid gap-3">
         <Label for="Username">Username</Label>
-        <Input id="username" type="username" placeholder="max123" required v-model="username" />
+        <Input id="username" type="username" required v-model="modelLogin.username" />
       </div>
       <div class="grid gap-3">
         <div class="flex items-center">
           <Label for="password">Password</Label>
           <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">
-            Forgot your password?
+            <Sheet>
+              <SheetTrigger class="hover:underline cursor-pointer">Forgot your password?</SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Email address to receive reset code</SheetTitle>
+                  <SheetDescription>
+                    Check your email for a verification message. It contains a link to reset your password.
+                  </SheetDescription>
+                  <hr class="mt-3">
+                  <Input id="email" class="mt-3" type="email" placeholder="m@example.com" required />
+                  <Button type="submit" class="mt-3">Access your account</Button>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
           </a>
         </div>
-        <Input id="password" type="password" required v-model="password" />
+        <Input id="password" type="password" required v-model="modelLogin.password" />
       </div>
 
       <Button type="submit" class-name="w-full">Access your account</Button>

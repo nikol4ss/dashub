@@ -3,11 +3,13 @@ import { jwtDecode } from 'jwt-decode'
 
 import Login from '@/pages/auth/Login.vue'
 import Signup from '@/pages/auth/Signup.vue'
+import ResetPassword from '@/pages/auth/ResetPassword.vue'
 import MainLayout from '@/pages/layout/MainLayout.vue'
 
 const routes = [
   { path: '/login/', name: 'Login', component: Login, meta: { title: 'Dashub - Login' } },
   { path: '/signup/', name: 'Signup', component: Signup },
+  { path: '/password_reset/confirm', name: 'ResetPassword', component: ResetPassword },
   { path: '/central/', name: 'Central', component: MainLayout, meta: { requiresAuth: true } }
 ]
 
@@ -42,7 +44,7 @@ router.beforeEach((to, _from, next) => {
 
   try {
     decoded = jwtDecode<{ exp: number }>(token)
-    
+
   } catch {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')

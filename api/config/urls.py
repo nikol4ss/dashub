@@ -32,6 +32,7 @@ urlpatterns = [
     path("api/signup/", Signup.as_view(), name="signup"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
     # API -> Browsable login (DRF)
     path("api", include("rest_framework.urls", namespace="rest_framework")),

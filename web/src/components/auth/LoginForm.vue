@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
+import { type HTMLAttributes } from 'vue'
 
 import { Toaster } from 'vue-sonner'
 
@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { cn } from '@/lib/utils'
-import { modelLogin } from '@/models/auth.models'
-import { postLogin } from '@/services/api'
+import { modelLogin, modelResetPassword } from '@/models/auth.models'
+import { postLogin, postResetPassword } from '@/services/api'
 
 import {
   Sheet,
@@ -20,9 +20,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
+
 const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
+
+function handleResetPassword() {
+  postResetPassword(modelResetPassword)
+}
 
 function handleSubmit() {
   postLogin(modelLogin)
@@ -30,6 +35,7 @@ function handleSubmit() {
 </script>
 
 <template>
+  <BounceLoader :loading="true" color="#3b82f6" size="40px" />
   <Toaster richColors theme="dark" />
   <form :class="cn('flex flex-col gap-6 max-w-sm mx-auto', props.class)" @submit.prevent="handleSubmit">
     <div class="flex flex-col items-center gap-2 text-center">
@@ -57,8 +63,11 @@ function handleSubmit() {
                     Check your email for a verification message. It contains a link to reset your password.
                   </SheetDescription>
                   <hr class="mt-3">
-                  <Input id="email" class="mt-3" type="email" placeholder="m@example.com" required />
-                  <Button type="submit" class="mt-3">Access your account</Button>
+                  <form @submit.prevent="handleResetPassword">
+                    <Input id="email" class="mt-3" type="email" required v-model="modelResetPassword.email"
+                      placeholder="m@example.com" />
+                    <Button type="submit" class="mt-3 w-full">Send Reset Link</Button>
+                  </form>
                 </SheetHeader>
               </SheetContent>
             </Sheet>

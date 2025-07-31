@@ -13,6 +13,15 @@ export type LoginForm = {
   password: string
 }
 
+export type ResetPassword = {
+  email: string
+}
+
+export type ResetConfirm = {
+  password: string
+  token: string
+}
+
 export const modelSignup = reactive<SignupForm>({
   first_name: "",
   last_name: "",
@@ -25,3 +34,8 @@ export const modelLogin = reactive<LoginForm>({
   username: "",
   password: "",
 })
+
+export const modelResetPassword = reactive<ResetPassword>({
+  email: "",
+})
+

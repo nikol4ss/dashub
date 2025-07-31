@@ -1,8 +1,10 @@
 import api from '@/lib/utils'
 import router from "@/router";
+
+import type { SignupForm, LoginForm, ResetPassword, ResetConfirm } from '@/models/auth.models';
+
 import { toast } from 'vue-sonner'
 import { toRaw } from 'vue'
-import type { SignupForm, LoginForm } from '@/models/auth.models';
 
 
 /**
@@ -104,6 +106,46 @@ export async function getCentral() {
 
   } catch(err: any) {
     toast.error(err.message || 'Error retrieving data from the control panel')
+    throw err
+  }
+}
+
+export async function postResetPassword(form: ResetPassword) {
+  try {
+    await api.post("password_reset/", toRaw(form))
+    toast.success("Email sent to your mailbox")
+  } catch (err: any) {
+    const data = err.response?.data
+
+    if (data && typeof data === 'object') {
+      Object.entries(data).forEach(([_, messages]) => {
+        (messages as string[]).forEach(msg => {
+          toast.error(String(msg))
+        })
+      })
+    } else {
+      toast.error(err)
+    }
+    throw err
+  }
+}
+
+export async function postResetConfirm(form: ResetConfirm) {
+  try {
+    await api.post("password_reset/confirm/", toRaw(form))
+    router.push("/login/")
+  } catch(err: any) {
+    const data = err.response?.data
+
+    if (data && typeof data === 'object') {
+      Object.entries(data).forEach(([_, messages]) => {
+        (messages as string[]).forEach(msg => {
+          toast.error(String(msg))
+        })
+      })
+    } else {
+      toast.error(err)
+    }
     throw err
   }
 }

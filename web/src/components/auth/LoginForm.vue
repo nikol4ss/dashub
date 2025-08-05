@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { type HTMLAttributes } from 'vue'
+import { ref, type HTMLAttributes } from 'vue'
 
 import { Toaster } from 'vue-sonner'
+import { LoaderCircle } from 'lucide-vue-next'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { cn } from '@/lib/utils'
-import { modelLogin, modelResetPassword } from '@/models/auth.models'
+import { modelLogin, modelResetPassword } from '@/models'
 import { postLogin, postResetPassword } from '@/services/api'
 
 import {
@@ -21,12 +22,18 @@ import {
 } from '@/components/ui/sheet'
 
 
+const isResetting = ref(false)
 const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
 
-function handleResetPassword() {
-  postResetPassword(modelResetPassword)
+async function handleResetPassword() {
+  isResetting.value = true
+  try {
+    await postResetPassword(modelResetPassword)
+  } finally {
+    isResetting.value = false
+  }
 }
 
 function handleSubmit() {
@@ -66,7 +73,12 @@ function handleSubmit() {
                   <form @submit.prevent="handleResetPassword">
                     <Input id="email" class="mt-3" type="email" required v-model="modelResetPassword.email"
                       placeholder="m@example.com" />
-                    <Button type="submit" class="mt-3 w-full">Send Reset Link</Button>
+                    <Button type="submit" class="mt-4 w-full" :disabled="isResetting">
+                      <LoaderCircle v-if="isResetting" class="size-4 animate-spin" />
+                      <span>
+                        {{ isResetting ? "Sending" : "Send recovery email" }}
+                      </span>
+                    </Button>
                   </form>
                 </SheetHeader>
               </SheetContent>

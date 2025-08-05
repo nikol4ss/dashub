@@ -22,7 +22,6 @@ import ToggleTheme from '@/components/shared/ToggleTheme.vue';
                     </div>
                 </div>
             </div>
-
             <div class="relative bg-muted hidden lg:block">
                 <img src="../../assets/placeholder.svg" alt="Image"
                     class="absolute inset-0 w-full h-full object-cover dark:brightness-[0.2] dark:grayscale" />

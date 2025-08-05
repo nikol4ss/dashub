@@ -1,7 +1,7 @@
 import api from '@/lib/utils'
 import router from "@/router";
 
-import type { SignupForm, LoginForm, ResetPassword, ResetConfirm } from '@/models/auth.models';
+import type { SignupForm, LoginForm, ResetPassword, ResetConfirm, DBconnection } from '@/models';
 
 import { toast } from 'vue-sonner'
 import { toRaw } from 'vue'
@@ -100,8 +100,6 @@ export async function getCentral() {
       localStorage.setItem('access_token', response.data.access)
     }
 
-    toast.success(response.data.value)
-
     return response.data
 
   } catch(err: any) {
@@ -110,6 +108,16 @@ export async function getCentral() {
   }
 }
 
+/**
+ * Sends a POST request to `password_reset/` with form data to initiate password reset.
+ *
+ * :On success, shows a toast indicating the reset email was sent.
+ * :On failure, shows error messages from API response or a generic error toast.
+ * :Throws the error after displaying the messages.
+ *
+ * @param {ResetPassword} form - Data object containing the user's email
+ * @throws {any} Re-throws the caught error for further handling
+ */
 export async function postResetPassword(form: ResetPassword) {
   try {
     await api.post("password_reset/", toRaw(form))
@@ -130,10 +138,20 @@ export async function postResetPassword(form: ResetPassword) {
   }
 }
 
+/**
+ * Sends a POST request to `password_reset/confirm/` with form data.
+ *
+ * :On success, redirects user to the login page.
+ * :On failure, shows error messages from API response or a generic error toast.
+ * :Throws the error after displaying the messages.
+ *
+ * @param {ResetConfirm} form - Data object for reset confirmation
+ * @throws {any} Re-throws the caught error for further handling
+ */
 export async function postResetConfirm(form: ResetConfirm) {
   try {
     await api.post("password_reset/confirm/", toRaw(form))
-    router.push("/login/")
+    router.push('/login/')
   } catch(err: any) {
     const data = err.response?.data
 
@@ -156,3 +174,23 @@ export function logout() {
   router.push('/login/')
 }
 
+export async function postDBconnection(form: DBconnection) {
+  try {
+    const response = await api.post("db/connect/", toRaw(form))
+    console.log(response.data);
+    console.log(response.status);
+  } catch (err: any) {
+    const data = err.response?.data
+
+    if (data && typeof data === 'object') {
+      Object.entries(data).forEach(([_, messages]) => {
+        (messages as string[]).forEach(msg => {
+          toast.error(String(msg))
+        })
+      })
+    } else {
+      toast.error(err)
+    }
+    throw err
+  }
+}

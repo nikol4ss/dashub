@@ -52,7 +52,7 @@ urlpatterns = [
     ),
 
     path("api/central/", CentralView.as_view(), name="central"),
-    path("api/db/connect", DatabaseConnection.as_view(), name="database_connect"),
+    path("api/db/connect/", DatabaseConnection.as_view(), name="database_connect"),
 ]
 
 # Static files

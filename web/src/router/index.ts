@@ -10,58 +10,57 @@ const routes = [
   { path: '/login/', name: 'Login', component: Login, meta: { title: 'Dashub - Login' } },
   { path: '/signup/', name: 'Signup', component: Signup },
   { path: '/password_reset/confirm', name: 'ResetPassword', component: ResetPassword },
-  { path: '/central/', name: 'Central', component: Central, meta: { requiresAuth: true } }
+  { path: '/central/', name: 'Central', component: Central, meta: { requiresAuth: true } },
 ]
+
+/**
+ * Checks if a JWT token is valid.
+ * - Verifies token existence and format.
+ * - Decodes token safely.
+ * - Checks expiration timestamp.
+ *
+ * @param token JWT string or null
+ * @returns boolean indicating if token is valid and not expired
+ */
+function isTokenValid(token: string | null): boolean {
+  if (!token || token === 'undefined' || token === 'null') return false
+
+  try {
+    const decoded = jwtDecode<{ exp: number }>(token)
+    if (!decoded.exp) return false
+
+    // Compare expiration with current timestamp (ms)
+    return Date.now() < decoded.exp * 1000
+  } catch {
+    return false
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
 /**
- * Vue Router navigation guard to protect routes requiring authentication.
- *
- * Workflow:
- * :Checks if JWT token exists and is valid in localStorage.
- * :If token is missing or invalid, redirects to /login.
- * :Decodes token safely; if decoding fails, clears tokens and redirects.
- * :Checks token expiration; if expired, clears tokens and redirects.
- * :Prevents authenticated users from accessing /login by redirecting to /central.
- * :Allows navigation if authenticated and route is permitted.
- *
- * @param {import('vue-router').RouteLocationNormalized} to - Target route object
- * @param {import('vue-router').RouteLocationNormalized} _from - Current route (unused)
- * @param {(path?: string) => void} next - Function to resolve navigation
+ * Navigation guard to protect routes that require authentication.
+ * - Redirects unauthenticated users to /login.
+ * - Removes invalid or expired tokens.
+ * - Prevents authenticated users from accessing /login.
  */
 router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem('access_token')
 
-  if (!token || token === 'undefined' || token === 'null') {
+  if (!isTokenValid(token)) {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+
     if (to.meta.requiresAuth) return next('/login/')
     return next()
   }
 
-  let decoded: { exp?: number } | null = null
+  if (to.path === '/login/') return next('/central/')
 
-  try {
-    decoded = jwtDecode<{ exp: number }>(token)
-
-  } catch {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    return next('/login/')
-  }
-
-  if (!decoded.exp || Date.now() >= decoded.exp * 1000) {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    return next('/login/')
-  }
-
-  if (to.path === '/login/') {
-    return next('/central/')
-  }
-
-  return next()
+  next()
 })
 
 export default router

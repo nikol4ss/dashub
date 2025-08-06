@@ -37,7 +37,7 @@ const data = {
   },
   teams: [
     {
-      name: 'Default Database sadasdasdad asadad',
+      name: 'Default Database',
       logo: Database,
       status: 'Conected',
     }

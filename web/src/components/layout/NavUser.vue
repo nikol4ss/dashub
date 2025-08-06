@@ -43,7 +43,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 import { ref } from 'vue'
-import { logout } from '@/services/api'
+import { logout } from '@/services/auth.services'
 
 defineProps<{
   user: {

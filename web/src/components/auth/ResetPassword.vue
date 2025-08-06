@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, reactive, type HTMLAttributes } from 'vue'
-
 import { Toaster } from 'vue-sonner'
 
 import { Button } from '@/components/ui/button'
@@ -8,15 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { cn } from '@/lib/utils'
-import { postResetConfirm } from '@/services/api'
+import { postResetConfirm } from '@/services/auth.services'
 import { useRoute } from 'vue-router'
-import type { ResetConfirm } from '@/models'
-
+import type { ResetConfirm } from '@/models/auth.model'
 
 const props = defineProps<{
     class?: HTMLAttributes['class']
 }>()
-
 
 const route = useRoute()
 const token = route.query.token as string
@@ -27,10 +24,12 @@ const modelResetConfirm = reactive<ResetConfirm>({
 })
 
 function handleResetConfirm() {
+    // Sends password reset confirmation to API
     postResetConfirm(modelResetConfirm)
 }
 
 onMounted(() => {
+    // Initialize token from query params on mount
     modelResetConfirm.token = String(route.query.token || '')
 })
 </script>
@@ -49,7 +48,7 @@ onMounted(() => {
                 <Label for="password">New Password</Label>
                 <Input id="password" type="password" required v-model="modelResetConfirm.password" />
             </div>
-            <Button type="submit" class-name="w-full">Update Password</Button>
+            <Button type="submit" class="w-full">Update Password</Button>
         </div>
     </form>
 </template>

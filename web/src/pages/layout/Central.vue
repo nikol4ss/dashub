@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import ToggleTheme from '@/components/shared/ToggleTheme.vue'
-
 import { Toaster } from 'vue-sonner'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -12,13 +11,11 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-
 import {
     SidebarInset,
     SidebarProvider,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
-
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,37 +27,29 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { jwtDecode } from 'jwt-decode'
-import { getCentral } from '@/services/api'
-import { logout } from '@/services/api'
+import { getCentral, logout } from '@/services/auth.services'
 
 const description = 'A sidebar that collapses to icons.'
 const iframeHeight = '800px'
 const containerClass = 'w-full h-full'
-
-defineExpose({
-    description,
-    iframeHeight,
-    containerClass,
-})
+defineExpose({ description, iframeHeight, containerClass })
 
 const centralData = ref<any>(null)
 const backClicked = ref(false)
 
 function handlePopState() {
+    // Handle browser back button
     backClicked.value = true
 }
 
-onMounted(() => {
-    window.addEventListener('popstate', handlePopState)
-})
-
-onUnmounted(() => {
-    window.removeEventListener('popstate', handlePopState)
-})
+// Attach/remove popstate listener
+onMounted(() => window.addEventListener('popstate', handlePopState))
+onUnmounted(() => window.removeEventListener('popstate', handlePopState))
 
 onMounted(async () => {
+    // Decode token and fetch central data
     const token = localStorage.getItem('access_token')
     if (!token) return
 
@@ -74,13 +63,13 @@ onMounted(async () => {
 
         centralData.value = await getCentral()
     } catch (err) {
-        console.log('Erro ao carregar central:', err)
+        console.error('Failed to load central:', err)
     }
 })
 </script>
 
 <template>
-    <Toaster richColors theme="dark" position="bottom-center" />
+    <Toaster richColors theme="dark" />
     <SidebarProvider>
         <AppSidebar />
         <SidebarInset>

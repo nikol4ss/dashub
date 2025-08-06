@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { modelSignup } from '@/models'
-import { formSignup } from '@/services/api'
-
+import { modelSignup } from '@/models/auth.model'
+import { formSignup } from '@/services/auth.services'
 
 function handleSubmit() {
+  // Sends signup data to API
   formSignup(modelSignup)
 }
 </script>

@@ -1,7 +1,5 @@
 import { reactive } from 'vue'
 
-type Dialect = 'postgresql' | 'mysql' | 'mariadb' | 'mssql' | 'oracle' | 'sqlite'
-
 export type SignupForm = {
   first_name: string
   last_name: string
@@ -24,16 +22,6 @@ export type ResetConfirm = {
   token: string
 }
 
-export type DBconnection = {
-  name: string
-  database: string
-  dialect: Dialect | ""
-  username: string
-  password: string
-  host: string
-  port: number
-}
-
 export const modelSignup = reactive<SignupForm>({
   first_name: "",
   last_name: "",
@@ -49,14 +37,4 @@ export const modelLogin = reactive<LoginForm>({
 
 export const modelResetPassword = reactive<ResetPassword>({
   email: "",
-})
-
-export const modelDBconnection = reactive<DBconnection>({
-  name: "",
-  database: "",
-  dialect: "",
-  username: "",
-  password: "",
-  host: "",
-  port: 0,
 })

@@ -14,15 +14,24 @@ from .serializers import SignupSerializer
 
 @method_decorator(csrf_exempt, name="dispatch")
 class Signup(APIView):
-    # Receives registration data and creates a new user via POST
+    """
+    Endpoint to register a new user.
+    Accepts registration data and creates a new user account.
+    """
+
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        operation_description="Create a new user account",
+        operation_description="Register a new user by providing necessary account details",
         request_body=SignupSerializer,
         responses={
-            201: openapi.Response(description="User created successfully"),
-            400: openapi.Response(description="Validation errors"),
+            201: openapi.Response(
+                description="New user account created successfully",
+                schema=SignupSerializer,
+            ),
+            400: openapi.Response(
+                description="Validation errors in the submitted data"
+            ),
         },
     )
     def post(self, request):
@@ -35,14 +44,18 @@ class Signup(APIView):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class CentralView(APIView):
-    # Returns authenticated user data via GET
+    """
+    Endpoint to retrieve information about the authenticated user.
+    Returns user-specific data confirming authentication status.
+    """
+
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="Get authenticated user Central info",
+        operation_description="Retrieve authenticated user information",
         responses={
             200: openapi.Response(
-                description="User authenticated",
+                description="Authenticated user data returned successfully",
                 examples={
                     "application/json": {
                         "message": "You are authenticated",
@@ -50,7 +63,7 @@ class CentralView(APIView):
                     }
                 },
             ),
-            401: openapi.Response(description="Unauthorized"),
+            401: openapi.Response(description="User is not authenticated"),
         },
     )
     def get(self, request):

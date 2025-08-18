@@ -18,7 +18,7 @@ from apps.database.views import DatabaseConnection
 schema_view = get_schema_view(
     openapi.Info(
         title="Dashub API",
-        default_version="v1",
+        default_version="v1.1",
         description="API documentation for Dashub",
     ),
     public=True,

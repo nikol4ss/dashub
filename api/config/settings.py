@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = True
 ALLOWED_HOSTS = []
 SECRET_KEY = "django-insecure-^e6v%_wvd66&z%!2#6rh&0^a_lrbabl3+4&e4olel26l44wr7="
+FIELD_ENCRYPTION_KEY = b'EMZ0aTRxzEA3HETNJJfCVLPtE79zIFQi9kbVPJ_RZbk='
 LOGIN_REDIRECT_URL = "/"
 
 INSTALLED_APPS = [

@@ -9,7 +9,7 @@ export type DatabaseConnection = {
   username: string
   password: string
   host: string
-  port: number
+  port: number | null
 }
 
 export const modelDatabaseConnection = reactive<DatabaseConnection>({
@@ -19,5 +19,5 @@ export const modelDatabaseConnection = reactive<DatabaseConnection>({
   username: "",
   password: "",
   host: "",
-  port: 0,
+  port: null,
 })

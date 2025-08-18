@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from encrypted_model_fields.fields import EncryptedCharField
 
 class Dialect(models.TextChoices):
     POSTGRESQL = "postgresql", "PostgreSQL"
@@ -20,7 +21,7 @@ class DatabaseConnection(models.Model):
         max_length=20, choices=Dialect.choices, default=Dialect.POSTGRESQL
     )
     username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+    password = EncryptedCharField(max_length=50)
     host = models.CharField(max_length=50)
     port = models.IntegerField()
 

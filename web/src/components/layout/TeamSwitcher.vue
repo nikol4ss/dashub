@@ -119,7 +119,7 @@ function handleDBconnection(): void {
               </SheetDescription>
               <hr class="mt-3">
               <form @submit.prevent="handleDBconnection" class="flex flex-col gap-6 max-w-sm mx-auto">
-                <div class="grid gap-3">
+                <div class="grid gap-3 mt-3">
                   <Label for="name-workspace">Name Workspace</Label>
                   <Input id="name-workspace" v-model="modelDatabaseConnection.name" placeholder="Connection name"
                     required />

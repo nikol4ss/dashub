@@ -16,3 +16,7 @@ class DatabaseConnectionSerializers(serializers.ModelSerializer):
             "host",
             "port",
         ]
+
+        extra_kwargs = {
+            "user": {"read_only": True}  
+        }

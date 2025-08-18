@@ -64,17 +64,25 @@ TEMPLATES = [
     },
 ]
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "mssql",
+#         "NAME": "Dashub",
+#         "HOST": "localhost",
+#         "OPTIONS": {
+#             "driver": "ODBC Driver 18 for SQL Server",
+#             "extra_params": "TrustServerCertificate=yes;Trusted_Connection=yes",
+#         },
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "mssql",
-        "NAME": "Dashub",
-        "HOST": "localhost",
-        "OPTIONS": {
-            "driver": "ODBC Driver 18 for SQL Server",
-            "extra_params": "TrustServerCertificate=yes;Trusted_Connection=yes",
-        },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, type Component } from 'vue'
+import { ref, type Component } from 'vue'
 import { ChevronsUpDown, Plus } from 'lucide-vue-next'
 
 import {
@@ -11,6 +11,15 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import {
   Sheet,
@@ -27,18 +36,10 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 
-import mariadbIcon from '@/assets/mariadb.svg'
-import pgIcon from '@/assets/postgresql.svg'
-import mysqlIcon from '@/assets/mysql.svg'
-import sqlserverIcon from '@/assets/sqlserver.svg'
-import sqliteIcon from '@/assets/sqlite.svg'
-import oracleIcon from '@/assets/oracle.svg'
-
 import { postDBconnection } from '@/services/database.services'
 import { modelDatabaseConnection, type Dialect } from '@/models/database.model'
 
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -55,47 +56,7 @@ const { isMobile } = useSidebar()
 const activeTeam = ref(props.teams[0])
 const showSheet = ref(false)
 
-interface Icon {
-  src: string
-  alt: string
-}
-
-const icons: Icon[] = [
-  { src: mariadbIcon, alt: 'MariaDB' },
-  { src: pgIcon, alt: 'PostgreSQL' },
-  { src: mysqlIcon, alt: 'MySQL' },
-  { src: sqlserverIcon, alt: 'SQL Server' },
-  { src: sqliteIcon, alt: 'SQLite' },
-  { src: oracleIcon, alt: 'Oracle' },
-]
-
 const dialects: Dialect[] = ['mariadb', 'postgresql', 'mysql', 'mssql', 'sqlite', 'oracle']
-const selectedIndex = ref<number | null>(null)
-
-watch(
-  // Sync selectedIndex when modelDatabaseConnection.dialect changes
-  () => modelDatabaseConnection.dialect,
-  (newDialect) => {
-    if (typeof newDialect === 'string' && newDialect !== '') {
-      const idx = dialects.indexOf(newDialect as Dialect)
-      selectedIndex.value = idx >= 0 ? idx : null
-    } else {
-      selectedIndex.value = null
-    }
-  },
-  { immediate: true }
-)
-
-function selectIcon(idx: number): void {
-  // Select or deselect icon, updating modelDatabaseConnection.dialect accordingly
-  if (selectedIndex.value === idx) {
-    selectedIndex.value = null
-    modelDatabaseConnection.dialect = ''
-  } else {
-    selectedIndex.value = idx
-    modelDatabaseConnection.dialect = dialects[idx]
-  }
-}
 
 function handleDBconnection(): void {
   postDBconnection(modelDatabaseConnection)
@@ -164,30 +125,23 @@ function handleDBconnection(): void {
                     required />
                 </div>
 
+                <hr>
+
                 <div class="grid gap-3">
                   <Label>DBMS Dialect</Label>
-                  <div class="grid grid-cols-3 gap-10 p-5 border rounded border-border">
-                    <div v-for="(icon, idx) in icons" :key="idx" class="flex flex-col items-center gap-2">
-                      <Badge
-                        class="cursor-pointer transition-transform duration-300 flex items-center justify-center p-2 w-18 h-18"
-                        :class="selectedIndex === idx ? 'bg-black dark:bg-white scale-110' : 'bg-muted scale-100'"
-                        @click="selectIcon(idx)">
-                        <img :src="icon.src" :alt="icon.alt" :class="[
-                          'transition-transform duration-300',
-                          selectedIndex === idx
-                            ? 'invert dark:invert-0 scale-110'
-                            : 'invert-0 dark:invert scale-100'
-                        ]" />
-                      </Badge>
-                      <span class="transition-all duration-300 text-sm whitespace-nowrap"
-                        :class="selectedIndex === idx ? 'text-base' : 'text-muted-foreground'">
-                        {{ icon.alt }}
-                      </span>
-                    </div>
-                  </div>
+                  <Select v-model="modelDatabaseConnection.dialect">
+                    <SelectTrigger class="w-full">
+                      <SelectValue placeholder="Select a DBMS" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="dialect in dialects" :key="dialect" :value="dialect">
+                          {{ dialect }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
-
-                <hr>
 
                 <div class="grid gap-3">
                   <Label for="name-database">Database</Label>

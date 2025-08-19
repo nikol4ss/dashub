@@ -8,41 +8,35 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function toastError(err: any) {
-  // Displays error messages from an API response using toasts and throws the error.
-  const data = err.response?.data
-
-  if (data && typeof data === 'object') {
-    Object.entries(data).forEach(([_, messages]) => {
-      if (Array.isArray(messages)) {
-        messages.forEach(msg => toast.error(String(msg)))
-      } else {
-        toast.error(String(messages))
-      }
-    })
-  } else {
-    toast.error(err.message || String(err))
-  }
-
-  throw err
+function displayObject(data: any, typeToast: string) {
+    if (data && typeof data === 'object') {
+      Object.entries(data).forEach(([_, messages]) => {
+        if (Array.isArray(messages)) {
+          if (typeToast == "success") {
+            messages.forEach(msg => toast.success(String(msg)))
+          } else if (typeToast == "warning"){
+            messages.forEach(msg => toast.warning(String(msg)))
+          } else if (typeToast == "error") {
+            messages.forEach(msg => toast.error(String(msg)))
+          } else if (typeToast == "info") {
+            messages.forEach(msg => toast.info(String(msg)))
+          }
+        } else {
+          toast.error(String(messages))
+        }
+      })
+    }
 }
 
-export function toastSuccess(ok: any) {
-  // Displays ok messages from an API response using toasts and throws the ok.
-  const data = ok.response?.data
+export function toastStatus(error: any) {
+  const code = error.response?.status
+  const data = error.response?.data
 
-  if (data && typeof data === 'object') {
-    Object.entries(data).forEach(([_, messages]) => {
-      if (Array.isArray(messages)) {
-        messages.forEach(msg => toast.success(String(msg)))
-      } else {
-        toast.success(String(messages))
-      }
-    })
-  } else {
-    toast.success(ok.message || String(ok))
+  if (code >= 200 && code < 300) {
+    displayObject(data, "success")
+  } else if (code >= 400 && code < 500) {
+    displayObject(data, "warning")
+  } else if (code >= 500 && code < 600) {
+    displayObject(data, "error")
   }
-
-  throw ok
 }
-

@@ -3,7 +3,7 @@ import router from '@/router'
 
 import type { SignupForm, LoginForm, ResetPassword, ResetConfirm } from '@/models/auth.model'
 
-import { toastError } from '@/lib/utils'
+import { toastStatus } from '@/lib/utils'
 import { toast } from 'vue-sonner'
 import { toRaw } from 'vue'
 
@@ -28,7 +28,7 @@ export async function postLogin(form: LoginForm) {
 
     return router.push('/central/')
   } catch (err: any) {
-    toastError(err)
+    toastStatus(err)
   }
 }
 
@@ -46,7 +46,7 @@ export async function formSignup(form: SignupForm) {
     await api.post('signup/', toRaw(form))
     router.push('/login/')
   } catch (err: any) {
-    toastError(err)
+    toastStatus(err)
   }
 }
 
@@ -64,7 +64,7 @@ export async function postResetPassword(form: ResetPassword) {
     await api.post('password_reset/', toRaw(form))
     toast.success('Email sent to your mailbox')
   } catch (err: any) {
-    toastError(err)
+    toastStatus(err)
   }
 }
 
@@ -82,7 +82,7 @@ export async function postResetConfirm(form: ResetConfirm) {
     await api.post('password_reset/confirm/', toRaw(form))
     router.push('/login/')
   } catch (err: any) {
-    toastError(err)
+    toastStatus(err)
   }
 }
 
@@ -114,7 +114,7 @@ export async function getCentral() {
     return response.data
 
   } catch(err: any) {
-    toastError(err)
+    toastStatus(err)
     throw err
   }
 }

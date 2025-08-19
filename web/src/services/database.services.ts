@@ -2,8 +2,9 @@ import api from './api'
 
 import type { DatabaseConnection } from '@/models/database.model'
 
-import { toastError } from '@/lib/utils'
+import { toastStatus } from '@/lib/utils'
 import { toRaw } from 'vue'
+import { toast } from 'vue-sonner'
 
 
 /**
@@ -18,7 +19,8 @@ import { toRaw } from 'vue'
 export async function postDBconnection(form: DatabaseConnection) {
   try {
     await api.post('db/connect/', toRaw(form))
+    toast.success("Database connection insertion done")
   } catch (err: any) {
-      toastError(err)
+      toastStatus(err)
   }
 }
